@@ -1,0 +1,74 @@
+{
+  "schema": "corpus-adequacy.manifest.v0",
+  "runner": "process",
+  "repo_root": ".",
+  "implementation": "conformance/evidence-sufficiency-v1/checker.py",
+  "implementation_sources": [
+    "conformance/evidence-sufficiency-v1/checker.py"
+  ],
+  "build": [],
+  "id_key": "vector_id",
+  "vector_path_key": "path",
+  "default_group": "remora",
+  "equivalent": {},
+  "entrypoint_command": [
+    "python3",
+    "-B",
+    "ca_case.py",
+    "guidance",
+    "{vector}"
+  ],
+  "outcome_from": [
+    "missing_evidence",
+    "decisive_if"
+  ],
+  "vectors": "ca_vectors.json",
+  "mutants": {
+    "remora": [
+      {
+        "label": "CONTROL positive: _unknown returns ESTABLISHED",
+        "control": true,
+        "control_polarity": "positive",
+        "anchor": "return _result(claim, EvidenceStatus.NOT_ESTABLISHED, reason, scope)",
+        "replacement": "return _result(claim, EvidenceStatus.ESTABLISHED, reason, scope)"
+      },
+      {
+        "label": "CONTROL inert: docstring edit",
+        "control": true,
+        "control_polarity": "inert",
+        "anchor": "\"\"\"Does accepted evidence establish a covering admission for this execution?",
+        "replacement": "\"\"\"Does accepted evidence establish a covering admission for this execution (inert)?"
+      },
+      {
+        "label": "[H] admission match borrows source acceptance",
+        "anchor": "if o.get(\"admission_matches\") is True:",
+        "replacement": "if o.get(\"admission_source_accepted\") is True:"
+      },
+      {
+        "label": "[H] route binding borrows route location",
+        "anchor": "if o.get(\"same_protected_operation\") is not True:",
+        "replacement": "if o.get(\"outside_required_pep\") is not True:"
+      },
+      {
+        "label": "[H] postcondition binding borrows source acceptance",
+        "anchor": "if o.get(\"same_target_and_predicate\") is not True:",
+        "replacement": "if o.get(\"source_accepted\") is not True:"
+      },
+      {
+        "label": "[H] canonical string values case-folded",
+        "anchor": "return json.dumps(value, sort_keys=True, separators=(\",\", \":\"), ensure_ascii=False)",
+        "replacement": "return json.dumps(value.casefold() if isinstance(value, str) else value, sort_keys=True, separators=(\",\", \":\"), ensure_ascii=False)"
+      },
+      {
+        "label": "[H] canonical list order erased",
+        "anchor": "return json.dumps(value, sort_keys=True, separators=(\",\", \":\"), ensure_ascii=False)",
+        "replacement": "return json.dumps(sorted(value, key=lambda x: json.dumps(x, sort_keys=True)) if isinstance(value, list) else value, sort_keys=True, separators=(\",\", \":\"), ensure_ascii=False)"
+      },
+      {
+        "label": "[H] canonical mapping values ignored",
+        "anchor": "return json.dumps(value, sort_keys=True, separators=(\",\", \":\"), ensure_ascii=False)",
+        "replacement": "return json.dumps(sorted(value.keys()) if isinstance(value, dict) else value, sort_keys=True, separators=(\",\", \":\"), ensure_ascii=False)"
+      }
+    ]
+  }
+}

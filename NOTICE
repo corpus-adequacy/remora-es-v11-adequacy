@@ -1,0 +1,15 @@
+SPDX-License-Identifier: BUSL-1.1
+Author: Stian Skogbrott
+Copyright (C) 2026 Stian Skogbrott.
+
+The files manifests/ca_known-row*.manifest.json, manifests/ca_additional-row*.manifest.json and
+additional-faults-FROZEN.json quote lines and functions of conformance/evidence-sufficiency-v1/checker.py
+from darklordVirtual/REMORA-research as mutation anchors and replacements. The checker is byte-identical
+at 31c4060630923344d43d9fac26821150262c3687 and 57ee0351a6acd6c1dd865ca933603469ab519cd4.
+That quoted upstream material retains its Business Source License 1.1 terms and attribution wherever
+it appears in this package. The exact upstream LICENSE at the latter commit is UPSTREAM-LICENSE.txt.
+Used for non-production evaluation under the handling agreed in REMORA-research issue629.
+
+The external adapter files, report and delivery documentation add no licence to the quoted material.
+This NOTICE is a delivery-file inventory update; it does not relicense upstream code or claim that
+permission to publish v1.0 extends automatically to this v1.1 result.

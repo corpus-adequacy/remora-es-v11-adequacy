@@ -1,0 +1,44 @@
+{
+  "schema": "remora.additional-faults.v1",
+  "source_commit": "57ee0351a6acd6c1dd865ca933603469ab519cd4",
+  "checker_sha256": "c4ca50aee2b2918b11c6fbde1f8615ca6c6bf1e5b6fa2ac1775f49c5e8c20be0",
+  "scope": "Six new operators withheld from maintainer before execution; not blind or independent; known v1.1 aggregate results and public design already seen. No v1.1 case inputs inspected during selection.",
+  "mutants": [
+    {
+      "label": "[H] admission match borrows source acceptance",
+      "anchor": "if o.get(\"admission_matches\") is True:",
+      "replacement": "if o.get(\"admission_source_accepted\") is True:",
+      "rationale": "Accepted provenance is not a covering admission bound to this execution."
+    },
+    {
+      "label": "[H] route binding borrows route location",
+      "anchor": "if o.get(\"same_protected_operation\") is not True:",
+      "replacement": "if o.get(\"outside_required_pep\") is not True:",
+      "rationale": "Being outside the PEP does not bind the same target and operation."
+    },
+    {
+      "label": "[H] postcondition binding borrows source acceptance",
+      "anchor": "if o.get(\"same_target_and_predicate\") is not True:",
+      "replacement": "if o.get(\"source_accepted\") is not True:",
+      "rationale": "Source acceptance does not bind the observed target/predicate."
+    },
+    {
+      "label": "[H] canonical string values case-folded",
+      "anchor": "return json.dumps(value, sort_keys=True, separators=(\",\", \":\"), ensure_ascii=False)",
+      "replacement": "return json.dumps(value.casefold() if isinstance(value, str) else value, sort_keys=True, separators=(\",\", \":\"), ensure_ascii=False)",
+      "rationale": "Exact JSON string values remain case-sensitive; no case-folding policy is declared."
+    },
+    {
+      "label": "[H] canonical list order erased",
+      "anchor": "return json.dumps(value, sort_keys=True, separators=(\",\", \":\"), ensure_ascii=False)",
+      "replacement": "return json.dumps(sorted(value, key=lambda x: json.dumps(x, sort_keys=True)) if isinstance(value, list) else value, sort_keys=True, separators=(\",\", \":\"), ensure_ascii=False)",
+      "rationale": "List sequence is data; sorting list members collapses distinct states."
+    },
+    {
+      "label": "[H] canonical mapping values ignored",
+      "anchor": "return json.dumps(value, sort_keys=True, separators=(\",\", \":\"), ensure_ascii=False)",
+      "replacement": "return json.dumps(sorted(value.keys()) if isinstance(value, dict) else value, sort_keys=True, separators=(\",\", \":\"), ensure_ascii=False)",
+      "rationale": "Equal object keys do not prove equal state values."
+    }
+  ]
+}
